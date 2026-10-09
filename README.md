@@ -1,40 +1,57 @@
-# Manual Bíblico — projeto para Vercel
+# Manual Bíblico — Next.js + Tailwind + Vercel
 
-Landing page responsiva com vídeos configuráveis por variáveis de ambiente no build.
+Projeto de landing page responsiva usando Next.js App Router, React, TypeScript e Tailwind CSS.
+
+## Requisitos
+- Node.js 18.18+ (recomendado Node.js 20 LTS)
+- npm
+
+## Instalação local
+
+1. Extraia o ZIP.
+2. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+3. Copie `.env.local.example` para `.env.local`.
+4. Edite `.env.local` com o link público do vídeo e os demais dados.
+5. Inicie o servidor:
+
+   ```bash
+   npm run dev
+   ```
+
+6. Abra http://localhost:3000
 
 ## Variáveis de ambiente
 
-Configure em **Vercel → Project → Settings → Environment Variables**:
+```env
+NEXT_PUBLIC_VIDEO_URL=https://www.youtube.com/embed/SEU_ID_DE_VIDEO
+NEXT_PUBLIC_CHECKOUT_URL=https://pay.kiwify.com.br/bBAoBrp?afid=T8WmRb7E
+NEXT_PUBLIC_WHATSAPP_NUMBER=5511999999999
+NEXT_PUBLIC_CONTACT_EMAIL=contato@seudominio.com.br
+```
 
-- `VIDEO_1_URL`: vídeo principal (YouTube, Vimeo ou URL direta HTTPS para MP4/WebM/Ogg)
-- `VIDEO_2_URL`: vídeo adicional (opcional)
-- `VIDEO_3_URL`: terceiro vídeo (opcional)
-- `CHECKOUT_URL`: link de checkout; por padrão já usa o link Kiwify informado
-- `WHATSAPP_NUMBER`: número internacional só com dígitos, por exemplo `5511999999999`
-- `CONTACT_EMAIL`: e-mail de contato (opcional)
+`NEXT_PUBLIC_VIDEO_URL` aceita:
+- URL de incorporação, como `https://www.youtube.com/embed/VIDEO_ID`
+- URL direta de arquivo de vídeo, como `https://cdn.exemplo.com/video.mp4`
 
-As variáveis de vídeo são inseridas durante o build. Alterou alguma variável? Faça um novo deploy para gerar o HTML atualizado.
+Para vídeos de YouTube, use o formato `/embed/ID`, não o endereço normal `watch?v=`. Para Vimeo ou outros provedores, use a URL de embed que o próprio provedor disponibiliza.
 
 ## Publicar no Vercel
 
-1. Envie esta pasta para um repositório GitHub.
-2. Importe o repositório no Vercel.
-3. O projeto usa `npm run build` e publica a pasta `dist` (já configurado em `vercel.json`).
-4. Configure as variáveis de ambiente no painel do Vercel e execute um novo deploy.
+1. Envie a pasta para um repositório GitHub.
+2. No Vercel, escolha **Add New → Project** e importe o repositório.
+3. Em **Settings → Environment Variables**, cadastre as variáveis do exemplo acima.
+4. Faça um novo deploy após alterar variáveis de ambiente, porque `NEXT_PUBLIC_*` é incorporado no bundle durante o build.
+5. A configuração de framework deve ser detectada como Next.js automaticamente.
 
-## Testar localmente
+## Observações importantes
 
-Requer Node.js 18 ou superior:
-
-```bash
-npm run build
-```
-
-Depois abra `dist/index.html` ou rode um servidor estático apontando para `dist`.
-
-## Observações
-
-- Um HTML estático não lê variáveis de ambiente diretamente no navegador; `build.js` injeta os valores durante a compilação.
-- Use URLs públicas HTTPS. Links de compartilhamento privados ou que exigem login não serão incorporados corretamente.
-- Os links de Política de Privacidade e Termos de Uso gerados são modelos e devem ser substituídos por conteúdo legal real antes da publicação.
-- A página de referência da Kiwify não foi copiada literalmente porque o conteúdo completo e os vídeos originais não foram fornecidos. Os campos de vídeo ficam prontos para receber as URLs reais.
+- O vídeo não está hardcoded: o player lê `process.env.NEXT_PUBLIC_VIDEO_URL`.
+- Sem URL de vídeo configurada, aparece um bloco informativo no lugar do player.
+- Os textos, módulos e seções são uma versão de referência baseada nas informações fornecidas; não é uma cópia pixel-perfect verificada da página externa.
+- Configure o número e o e-mail reais antes de publicar.
+- Crie páginas reais de política de privacidade e termos de uso antes de usar esses links em produção.
